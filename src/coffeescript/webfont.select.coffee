@@ -1,0 +1,180 @@
+(($) ->
+  loadedFonts = {}
+  $.widget 'webfont.wfselect', {
+    options: {
+      # Default use fonts list if one is not provided
+      fonts: {
+        google: {
+          families: ['Droid Sans', 'Signika']
+        },
+        # custom: {
+        #   families: ['My Font'],
+        #   urls: ['/fonts.css']
+        # }
+      },
+      merge_list: false
+    }
+    
+    _create: ->
+      self = this
+      options = @options
+      element = @element
+      useFonts = options.fonts || @options.fonts
+      element.addClass('webfont-input').attr('readonly', 'readonly').wrap $('<div/>').addClass('webfont-wrapper')
+      @wrapper = element.closest('.webfont-wrappers')
+      element.after self._createFontList(useFonts, @options.merge_list).hide()
+      self._selectFontByName element.val()
+      self.toggle = $('<div/>').addClass('ui-icon ui-icon-triangle-1-s').insertAfter(element)
+      self._bindHandlers()
+      return
+      
+    _createFontList: (fonts_options, merge = false) ->
+      @fontList = $('<ul/>').addClass 'webfont-list'
+      self = this
+      fonts = @_createFontObjects(fonts_options, merge)
+      $.each fonts, (index, font) ->
+        $('<li/>')
+          .html(font.font)
+          .data('font_name', font.font)
+          .data('font_type', font.type)
+          .css(self._fontToStyle(font.font))
+          .appendTo(self.fontList)
+        return
+      @fontList
+      
+    _createFontObjects: (fonts_options, merge = false) ->
+      fonts_list = []
+      $.each fonts_options, (key, families_object) ->
+        t = families_object.families.map (font) ->
+          return {font: font, type: key}
+        fonts_list = fonts_list.concat t
+        return
+      if merge
+        fonts_list = fonts_list.sort (a, b) ->
+          return a.font > b.font
+      return fonts_list
+      
+    _fontToStyle: (fontName) ->
+      font_and_weight = fontName.split ":"
+      return {
+        'font-family': @_readableFontName(font_and_weight[0]),
+        'font-weight': (font_and_weight[1] || 400)
+      }
+      
+    _readableFontName: (font_name) ->
+      font_name.replace /[\+|:]/g, ' '
+      
+    _selectFontByName: (name) ->
+      fonts = @fontList.find 'li'
+      match = $.grep fonts, (li, i) ->
+        ($(li).data('font_name') == name)
+      if match.length
+        @_selectFontListItem $(match).first()
+        return true
+      return false
+      
+    _selectFontListItem: (li) ->
+      return null if li.hasClass 'selected'
+      @fontList.find('li.selected').removeClass('selected')
+      li = $(li).addClass('selected')
+      font_name = li.data('font_name')
+      font_type = li.data('font_type')
+      styles = @_fontToStyle(font_name)
+      @element.css(styles)
+      if @element.val() != font_name
+        @element
+            .val(font_name)
+            .trigger('change')
+      @_trigger('change', null, styles)
+      @_loadFonts([{font: font_name, type: font_type}])
+      @_toggleFontList(false)
+      return
+      
+    _loadFonts: (fonts) ->
+      font_array =  $.grep fonts, (font_name) ->
+        return loadedFonts[fonts.font]
+      , true
+      if !font_array.length
+        return null
+      source = {}
+      $.each font_array, (index, fonts) ->
+        loadedFonts[fonts.font] = true
+        source[fonts.type] = {} if Object.keys(source).indexOf(fonts.type) == -1
+        source[fonts.type]['families'] = [] if Object.keys(source[fonts.type]).indexOf('families') == -1
+        source[fonts.type]['families'].push fonts.font
+        return
+      WebFont.load source
+      return
+      
+    _loadVisibleFonts: ->
+      if !@fontList.is(':visible')
+        return null
+      self = this
+      list_top = @fontList.scrollTop()
+      list_height = @fontList.height()
+      list_bottom = list_top + list_height
+      fonts = @fontList.find('li')
+      fontsToLoad = []
+      $.each fonts, (index, font) ->
+        font = $(font)
+        font_top = font.position().top
+        font_bottom = font_top + font.outerHeight()
+        if (font_bottom >= 0) && (font_top < list_height)
+          fontsToLoad.push({font: font.data('font_name'), type: font.data('font_type')})
+          return
+      @_loadFonts(fontsToLoad)
+      return
+      
+    _toggleFontList: (bool) ->
+      if bool
+        @wrapper.css {'z-index': 999999}
+        @fontList.show()
+        @_loadVisibleFonts()
+        selectedFont = @fontList.find('li.selected')
+        if selectedFont.length
+          @fontList.scrollTop selectedFont.position().top
+      else
+        @wrapper.css {'z-index': 'auto'}
+        @fontList.hide()
+      return
+      
+    _bindHandlers: ->
+      self = this
+      loadTimeout = null
+      $('html').bind 'click.webfont', (event) ->
+        self._toggleFontList false
+        return
+      open_font_list = (event) ->
+        self._toggleFontList true
+        event.stopPropagation()
+        return
+      @element.bind 'click.webfont', open_font_list
+      @toggle.bind 'click.webfont', open_font_list
+      @fontList.bind 'scroll.webfont', (event) ->
+        window.clearTimeout loadTimeout
+        loadTimeout = window.setTimeout ->
+          self._loadVisibleFonts()
+          return
+        , 250
+        return
+      .bind 'click.webfont', (event) ->
+        target = $(event.target)
+        if !target.is('li')
+          return null
+        self._selectFontListItem(target)
+        return
+      return
+      
+    destory: ->
+      @fontList.remove()
+      @toggle.remove()
+      @element
+          .removeClass('webfont-input')
+          .removeAttr('readonly')
+          .unbind('click.webfont')
+          .unwrap()
+      $('html').unbind('click.webfont')
+      $.Widget.prototype.destory.call(this)
+      return
+    }
+) jQuery
