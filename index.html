@@ -15,7 +15,14 @@
     <!-- Demo page JS and CSS -->
     <script>
       $(function () {
-        $('#webfont').wfselect().bind('wfselectchange', function (event, fontInfo){
+        $('#webfont').wfselect({ 
+          fonts: {
+            google: {
+              families: [{name: 'Droid Sans', url: null}, {name: 'Signika', url: null}],
+              url_generation: {base_url: 'https://fonts.googleapis.com/css?family=$font', space_char: '+'}
+            }
+          }
+        }).bind('wfselectchange', function (event, fontInfo){
           $('p').css(fontInfo);
         });
       });
@@ -33,7 +40,7 @@
     <body></body>
     <section>
       Select font:
-      <input id='webfont'>
+      <input id='webfont' value='Lato'>
     </section>
     <p>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod

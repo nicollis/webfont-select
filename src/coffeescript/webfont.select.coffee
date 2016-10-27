@@ -5,7 +5,9 @@
       # Default use fonts list if one is not provided
       fonts: {
         google: {
-          families: ['Droid Sans', 'Signika']
+          # families: ['Droid Sans', 'Signika'] # supported font list
+          families: [{name: 'Droid Sans', url: null}, {name: 'Signika', url: null}],
+          url_generation: {base_url: 'https://fonts.googleapis.com/css?family=$font', space_char: '+'}
         },
         # custom: {
         #   families: ['My Font'],
@@ -27,7 +29,7 @@
       self.toggle = $('<div/>').addClass('ui-icon ui-icon-triangle-1-s').insertAfter(element)
       self._bindHandlers()
       return
-      
+    
     _createFontList: (fonts_options, merge = false) ->
       @fontList = $('<ul/>').addClass 'webfont-list'
       self = this
@@ -37,6 +39,7 @@
           .html(font.font)
           .data('font_name', font.font)
           .data('font_type', font.type)
+          .data('font_url', font.url)
           .css(self._fontToStyle(font.font))
           .appendTo(self.fontList)
         return
@@ -44,15 +47,24 @@
       
     _createFontObjects: (fonts_options, merge = false) ->
       fonts_list = []
+      self = this
       $.each fonts_options, (key, families_object) ->
         t = families_object.families.map (font) ->
-          return {font: font, type: key}
+          if typeof font == 'string'
+            return {font: font, type: key, url: self._generateFontUrl(fonts_options, key, font)}
+          else
+            return {font: font.name, type: key, url: font.url || self._generateFontUrl(fonts_options, key, font.name)}
         fonts_list = fonts_list.concat t
         return
       if merge
         fonts_list = fonts_list.sort (a, b) ->
           return a.font > b.font
       return fonts_list
+      
+    _generateFontUrl: (fonts_options, font_type, font_name) ->
+      return null if fonts_options[font_type].url_generation == undefined
+      font_name = font_name.replace(" ", fonts_options[font_type].url_generation.space_char) if fonts_options[font_type].url_generation.space_char != undefined
+      fonts_options[font_type].url_generation.base_url.replace('$font', font_name)
       
     _fontToStyle: (fontName) ->
       font_and_weight = fontName.split ":"
@@ -79,11 +91,13 @@
       li = $(li).addClass('selected')
       font_name = li.data('font_name')
       font_type = li.data('font_type')
+      font_url = li.data('font_url')
       styles = @_fontToStyle(font_name)
       @element.css(styles)
       if @element.val() != font_name
         @element
             .val(font_name)
+            .attr('font_url', font_url)
             .trigger('change')
       @_trigger('change', null, styles)
       @_loadFonts([{font: font_name, type: font_type}])

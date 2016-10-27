@@ -21,6 +21,7 @@ View index.html or src/index.haml for an example
 ## Changelog
 
 * 2016-10-24 -- v0.1.0 -- Initial public release with tested Google support
+* 2016-10-26 -- v0.1.5 -- Added URL generation in config, and support for per font url object
 
 ## Author
 
