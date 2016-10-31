@@ -63,7 +63,7 @@
       
     _generateFontUrl: (fonts_options, font_type, font_name) ->
       return null if fonts_options[font_type].url_generation == undefined
-      font_name = font_name.replace(" ", fonts_options[font_type].url_generation.space_char) if fonts_options[font_type].url_generation.space_char != undefined
+      font_name = font_name.split(" ").join(fonts_options[font_type].url_generation.space_char) if fonts_options[font_type].url_generation.space_char != undefined
       fonts_options[font_type].url_generation.base_url.replace('$font', font_name)
       
     _fontToStyle: (fontName) ->
