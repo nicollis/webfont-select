@@ -129,7 +129,7 @@
       
     _loadFonts: (fonts) ->
       font_array =  $.grep fonts, (font_name) ->
-        return loadedFonts[fonts.font]
+        return loadedFonts[font_name.font]
       , true
       if !font_array.length
         return null
@@ -144,17 +144,26 @@
       return
       
     _loadAllFonts: ->
-      fonts_list = {}
+      fonts_list = [{}]
+      font_list_index = 0
+      font_list_counter = 0
       $.each this.options.fonts, (key, families_object) ->
-        fonts_list[key] = {families: []}
+        fonts_list[font_list_index][key] = {families: []}
         $.each families_object['families'], (i, font) ->
+          font_list_counter++
+          if font_list_counter >= 40
+            font_list_index++
+            font_list_counter = 0
+            fonts_list[font_list_index] = {}
+            fonts_list[font_list_index][key] = {families: []}
           if typeof font == 'string'
-            fonts_list[key]['families'].push font
+            fonts_list[font_list_index][key]['families'].push font
             loadedFonts[font] = true
           else
-            fonts_list[key]['families'].push font.name
+            fonts_list[font_list_index][key]['families'].push font.name
             loadedFonts[font.name] = true
-      WebFont.load fonts_list
+      $.each fonts_list, (i, list) ->
+        WebFont.load list
       
     _loadVisibleFonts: ->
       if !@fontList.is(':visible')
