@@ -24,6 +24,7 @@ View index.html or src/index.haml for an example
 * 2016-10-26 -- v0.1.5 -- Added URL generation in config, and support for per font url object
 * 2016-10-31 -- v0.1.6 -- Fixed issue with font generation when font had 3+ words
 * 2016-11-01 -- v0.2.0 -- Enabled type-to-filter input
+* 2016-11-01 -- v0.3.0 -- Enabled load_all_fonts option to enable loading all fonts on page load
 
 ## Author
 

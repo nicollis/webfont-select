@@ -14,7 +14,8 @@
         #   urls: ['/fonts.css']
         # }
       },
-      merge_list: false
+      merge_list: false,
+      load_all_fonts: false
     }
     
     _create: ->
@@ -29,6 +30,7 @@
       self._selectFontByName element.val()
       self.toggle = $('<div/>').addClass('ui-icon ui-icon-triangle-1-s').insertAfter(element)
       self._bindHandlers()
+      self._loadAllFonts() if options.load_all_fonts
       return
     
     _createFontList: (fonts_options, merge = false) ->
@@ -141,10 +143,22 @@
       WebFont.load source
       return
       
+    _loadAllFonts: ->
+      fonts_list = {}
+      $.each this.options.fonts, (key, families_object) ->
+        fonts_list[key] = {families: []}
+        $.each families_object['families'], (i, font) ->
+          if typeof font == 'string'
+            fonts_list[key]['families'].push font
+            loadedFonts[font] = true
+          else
+            fonts_list[key]['families'].push font.name
+            loadedFonts[font.name] = true
+      WebFont.load fonts_list
+      
     _loadVisibleFonts: ->
       if !@fontList.is(':visible')
         return null
-      self = this
       list_top = @fontList.scrollTop()
       list_height = @fontList.height()
       list_bottom = list_top + list_height

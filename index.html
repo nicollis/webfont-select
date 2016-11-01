@@ -21,7 +21,8 @@
               families: [{name: 'Droid Sans', url: null}, {name: 'Signika', url: null}, {name: 'Alfa Slab One', url: null}],
               url_generation: {base_url: 'https://fonts.googleapis.com/css?family=$font', space_char: '+'}
             }
-          }
+          },
+          load_all_fonts: true
         }).bind('wfselectchange', function (event, fontInfo){
           $('p').css(fontInfo);
         });
