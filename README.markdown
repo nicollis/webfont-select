@@ -23,6 +23,7 @@ View index.html or src/index.haml for an example
 * 2016-10-24 -- v0.1.0 -- Initial public release with tested Google support
 * 2016-10-26 -- v0.1.5 -- Added URL generation in config, and support for per font url object
 * 2016-10-31 -- v0.1.6 -- Fixed issue with font generation when font had 3+ words
+* 2016-11-01 -- v0.2.0 -- Enabled type-to-filter input
 
 ## Author
 

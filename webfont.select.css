@@ -30,7 +30,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   position: absolute;
-  top: 0;
+  top: 28px;
   left: 0; }
   .webfont-list li {
     cursor: pointer;

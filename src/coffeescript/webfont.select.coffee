@@ -22,7 +22,8 @@
       options = @options
       element = @element
       useFonts = options.fonts || @options.fonts
-      element.addClass('webfont-input').attr('readonly', 'readonly').wrap $('<div/>').addClass('webfont-wrapper')
+      element.addClass('webfont-input').wrap $('<div/>').addClass('webfont-wrapper')
+      element.on('keyup paste', {instance: self}, self._searchFontList)
       @wrapper = element.closest('.webfont-wrappers')
       element.after self._createFontList(useFonts, @options.merge_list).hide()
       self._selectFontByName element.val()
@@ -44,6 +45,26 @@
           .appendTo(self.fontList)
         return
       @fontList
+      
+    _searchFontList: (event) ->
+      self = event.data.instance
+      current_input = $(this).val()
+      fonts_options = self.options.fonts
+      filtered_fonts_options = $.extend(true, {}, fonts_options)
+      $.each filtered_fonts_options, (key, families_object) ->
+        families = families_object['families']
+        filtered_fonts_options[key]['families'] = families.filter(self._filterFontList, current_input)
+        return
+      self.element.nextAll().remove()
+      self.element.after self._createFontList(filtered_fonts_options, self.options.merge_list)
+      self._bindHandlers()
+      return
+      
+    _filterFontList: (font_obj) ->
+      if typeof font_obj == 'string'
+        return font_obj.toLowerCase().indexOf(this.toString().toLowerCase()) >= 0
+      else
+        return font_obj.name.toLowerCase().indexOf(this.toString().toLowerCase()) >= 0
       
     _createFontObjects: (fonts_options, merge = false) ->
       fonts_list = []
