@@ -7,7 +7,7 @@
 		"uuidString": "93C9D840-9070-49F9-9690-2CE34C43E094"
 		}
 	],
-"creatorBuild": "25390",
+"creatorBuild": "25428",
 "files": {
 	"\/.gitignore": {
 		"ft": 8192,
@@ -75,6 +75,16 @@
 		"oS": 0,
 		"uL": 1
 		},
+	"\/webfont.select-ck-source-map-reference.coffee": {
+		"ft": 32,
+		"ma": 0,
+		"mi": 0,
+		"oA": 0,
+		"oAP": "\/webfont.select-ck-source-map-reference.js",
+		"oF": 0,
+		"oS": 1,
+		"sC": 1
+		},
 	"\/webfont.select.css": {
 		"aP": 0,
 		"bl": 0,
@@ -126,6 +136,9 @@
 	"babelModuleID": "",
 	"babelNoComments": 0,
 	"babelPlugins": {
+		"async-generator-functions": {
+			"active": 0
+			},
 		"async-to-generator": {
 			"active": 0
 			},
@@ -1214,6 +1227,10 @@
 			"active": 0,
 			"optionString": "{'ignoreDestructuring': false, 'ignoreImport': false, 'ignoreExport': false}"
 			},
+		"no-useless-return": {
+			"active": 0,
+			"optionString": ""
+			},
 		"no-var": {
 			"active": 0,
 			"optionString": ""
@@ -1281,10 +1298,6 @@
 		"prefer-numeric-literals": {
 			"active": 0,
 			"optionString": ""
-			},
-		"prefer-reflect": {
-			"active": 0,
-			"optionString": "{'exceptions': []}"
 			},
 		"prefer-rest-params": {
 			"active": 0,

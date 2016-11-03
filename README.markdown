@@ -26,6 +26,7 @@ View index.html or src/index.haml for an example
 * 2016-11-01 -- v0.2.0 -- Enabled type-to-filter input
 * 2016-11-01 -- v0.3.0 -- Enabled load_all_fonts option to enable loading all fonts on page load
 * 2016-11-01 -- v0.3.2 -- Fixed load bug when pre-loading large font list, fixed bug with downloading already downloaded fonts
+* 2016-11-03 -- v0.3.3 -- Added timeout to all fonts load to help break up large font load-ins
 
 ## Author
 

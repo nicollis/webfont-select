@@ -162,8 +162,13 @@
           else
             fonts_list[font_list_index][key]['families'].push font.name
             loadedFonts[font.name] = true
+      timeout = 0
       $.each fonts_list, (i, list) ->
-        WebFont.load list
+        setTimeout (->
+          WebFont.load list
+          return
+          ), timeout += 200
+        
       
     _loadVisibleFonts: ->
       if !@fontList.is(':visible')
