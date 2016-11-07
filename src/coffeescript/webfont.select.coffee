@@ -52,6 +52,7 @@
       self = event.data.instance
       current_input = $(this).val()
       fonts_options = self.options.fonts
+      first_font_name = null
       filtered_fonts_options = $.extend(true, {}, fonts_options)
       $.each filtered_fonts_options, (key, families_object) ->
         families = families_object['families']
@@ -59,6 +60,7 @@
         return
       self.element.nextAll().remove()
       self.element.after self._createFontList(filtered_fonts_options, self.options.merge_list)
+      self._selectFontByName(self._getFirstFontInList(filtered_fonts_options), (if event.keyCode == 13 then false else true))
       self._bindHandlers()
       return
       
@@ -67,6 +69,15 @@
         return font_obj.toLowerCase().indexOf(this.toString().toLowerCase()) >= 0
       else
         return font_obj.name.toLowerCase().indexOf(this.toString().toLowerCase()) >= 0
+        
+    _getFirstFontInList: (fonts_options) ->
+      first_font_families = fonts_options[Object.keys(fonts_options)[0]].families
+      return null if first_font_families.length < 1
+      font_obj = first_font_families[0]
+      if typeof font_obj == 'string'
+        return font_obj
+      else
+        return font_obj.name
       
     _createFontObjects: (fonts_options, merge = false) ->
       fonts_list = []
@@ -99,16 +110,16 @@
     _readableFontName: (font_name) ->
       font_name.replace /[\+|:]/g, ' '
       
-    _selectFontByName: (name) ->
+    _selectFontByName: (name, highlight_only = false) ->
       fonts = @fontList.find 'li'
       match = $.grep fonts, (li, i) ->
         ($(li).data('font_name') == name)
       if match.length
-        @_selectFontListItem $(match).first()
+        @_selectFontListItem $(match).first(), highlight_only
         return true
       return false
       
-    _selectFontListItem: (li) ->
+    _selectFontListItem: (li, highlight_only = false) ->
       return null if li.hasClass 'selected'
       @fontList.find('li.selected').removeClass('selected')
       li = $(li).addClass('selected')
@@ -117,14 +128,15 @@
       font_url = li.data('font_url')
       styles = @_fontToStyle(font_name)
       @element.css(styles)
-      if @element.val() != font_name
-        @element
-            .val(font_name)
-            .attr('font_url', font_url)
-            .trigger('change')
       @_trigger('change', null, styles)
       @_loadFonts([{font: font_name, type: font_type}])
-      @_toggleFontList(false)
+      unless highlight_only
+        if @element.val() != font_name
+          @element
+              .val(font_name)
+              .attr('font_url', font_url)
+              .trigger('change')
+        @_toggleFontList(false)
       return
       
     _loadFonts: (fonts) ->

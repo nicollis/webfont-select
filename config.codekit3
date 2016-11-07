@@ -41,7 +41,7 @@
 		"oAP": "\/webfont.select.js",
 		"oF": 0,
 		"oS": 1,
-		"sC": 0
+		"sC": 1
 		},
 	"\/src\/index.haml": {
 		"cDA": 0,
@@ -74,16 +74,6 @@
 		"oF": 0,
 		"oS": 0,
 		"uL": 1
-		},
-	"\/webfont.select-ck-source-map-reference.coffee": {
-		"ft": 32,
-		"ma": 0,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "\/webfont.select-ck-source-map-reference.js",
-		"oF": 0,
-		"oS": 1,
-		"sC": 1
 		},
 	"\/webfont.select.css": {
 		"aP": 0,
