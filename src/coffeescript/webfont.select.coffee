@@ -130,12 +130,14 @@
       @element.css(styles)
       @_trigger('change', null, styles)
       @_loadFonts([{font: font_name, type: font_type}])
+      if @element.val() != font_name
+        @element
+            .attr('font_url', font_url)
+            .trigger('change')
       unless highlight_only
         if @element.val() != font_name
           @element
               .val(font_name)
-              .attr('font_url', font_url)
-              .trigger('change')
         @_toggleFontList(false)
       return
       
