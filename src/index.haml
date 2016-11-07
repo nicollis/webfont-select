@@ -24,6 +24,7 @@
           },
           load_all_fonts: true
         }).bind('wfselectchange', function (event, fontInfo){
+          console.log('Call Back');
           $('p').css(fontInfo);
         });
       });

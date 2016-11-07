@@ -128,7 +128,6 @@
       font_url = li.data('font_url')
       styles = @_fontToStyle(font_name)
       @element.css(styles)
-      @_trigger('change', null, styles)
       @_loadFonts([{font: font_name, type: font_type}])
       if @element.val() != font_name
         @element
@@ -139,6 +138,7 @@
           @element
               .val(font_name)
         @_toggleFontList(false)
+      @_trigger('change', null, styles)
       return
       
     _loadFonts: (fonts) ->

@@ -29,6 +29,7 @@ View index.html or src/index.haml for an example
 * 2016-11-03 -- v0.3.3 -- Added timeout to all fonts load to help break up large font load-ins
 * 2016-11-07 -- v0.4.0 -- First font in list is now selected while typing, enter key selects first font and closes dropdown
 * 2016-11-07 -- v0.4.1 -- Changed font_url to updated to highlighted font while typing in font name, before hitting enter
+* 2016-11-07 -- v0.4.2 -- Moved trigger to end of select font call so element is fully updated before triggering callback
 
 ## Author
 
