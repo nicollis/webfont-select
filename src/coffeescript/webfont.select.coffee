@@ -123,7 +123,7 @@
           @element
               .attr('font_url', @_generateFontUrl(@options['fonts'], @options['default_font_name']['type'], @options['default_font_name']['name']))
               .trigger('change')
-              .trigger('default')
+          @_trigger('default', null, @_fontToStyle(@options['default_font_name']['name']))
         return false
       
     _selectFontListItem: (li, highlight_only = false) ->

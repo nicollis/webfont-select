@@ -31,6 +31,7 @@ View index.html or src/index.haml for an example
 * 2016-11-07 -- v0.4.1 -- Changed font_url to updated to highlighted font while typing in font name, before hitting enter
 * 2016-11-07 -- v0.4.2 -- Moved trigger to end of select font call so element is fully updated before triggering callback
 * 2016-11-08 -- v0.5.0 -- Implemented default_font_name option to generate url when unknown font is typed; Also implemented a "default" trigger that triggers when default_font_name is used
+* 2016-11-08 -- v0.5.1 -- Updated trigger to work via bind and include same payload data as "change"
 
 ## Author
 

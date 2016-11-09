@@ -27,7 +27,7 @@
         }).bind('wfselectchange', function (event, fontInfo){
           console.log(event);
           $('p').css(fontInfo);
-        }).on('default', function(event){
+        }).bind('wfselectdefault', function(event, fontInfo){
           console.log('default font url loaded');
         });
       });
