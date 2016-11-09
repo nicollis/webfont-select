@@ -15,7 +15,8 @@
         # }
       },
       merge_list: false,
-      load_all_fonts: false
+      load_all_fonts: false,
+      default_font_name: {type: 'google', name: 'Signika'}
     }
     
     _create: ->
@@ -117,7 +118,13 @@
       if match.length
         @_selectFontListItem $(match).first(), highlight_only
         return true
-      return false
+      else
+        unless @options['default_font_name'] == undefined
+          @element
+              .attr('font_url', @_generateFontUrl(@options['fonts'], @options['default_font_name']['type'], @options['default_font_name']['name']))
+              .trigger('change')
+              .trigger('default')
+        return false
       
     _selectFontListItem: (li, highlight_only = false) ->
       return null if li.hasClass 'selected'

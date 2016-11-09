@@ -22,10 +22,13 @@
               url_generation: {base_url: 'https://fonts.googleapis.com/css?family=$font', space_char: '+'}
             }
           },
-          load_all_fonts: true
+          load_all_fonts: true,
+          default_font_name: {type: 'google', name: 'Signika'}
         }).bind('wfselectchange', function (event, fontInfo){
-          console.log('Call Back');
+          console.log(event);
           $('p').css(fontInfo);
+        }).on('default', function(event){
+          console.log('default font url loaded');
         });
       });
     :css
